@@ -25,7 +25,6 @@ public class OrderModel {
             return -1;
         if (hasDifferent(s1, s2))
             return -2;
-
         if (!isDigitalOrNumbers(s1) || !isDigitalOrNumbers(s2))
             return -3;
 

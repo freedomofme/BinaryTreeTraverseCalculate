@@ -9,12 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     EditText preEditText;
     EditText midEditText;
     EditText postEditText;
-    EditText nearestClicedText; //pre or post
+    boolean isPreOrder;
+
+    OrderModel orderModel = new OrderModel();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         init();
+        initListener();
     }
 
     private void init() {
@@ -48,25 +52,55 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 postEditText.setText("");
-                nearestClicedText = preEditText;
+                isPreOrder = false;
             }
         });
         postEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 preEditText.setText("");
-                nearestClicedText = postEditText;
+                isPreOrder = true;
             }
         });
 
     }
 
     public void doCalculateOrder(View view) {
+        String pre = preEditText.getText().toString();
+        String mid = midEditText.getText().toString();
+        String post = postEditText.getText().toString();
+
+        if (isPreOrder) {
+            int checkedCode = orderModel.securityCheck(post, mid);
+            if (checkedCode != 0)
+                toast(checkedCode);
+            else {
+                orderModel.calculateOrderList(post, mid, isPreOrder);
+                System.out.println(orderModel.resultArrayList);
+                preEditText.setText(orderModel.resultArrayList.toString() + "");
+            }
+        } else {
+            int checkedCode = orderModel.securityCheck(pre, mid);
+            if (checkedCode != 0)
+                toast(checkedCode);
+            else {
+                orderModel.calculateOrderList(pre, mid, isPreOrder);
+                System.out.println(orderModel.resultArrayList);
+                postEditText.setText(orderModel.resultArrayList.toString() + "");
+            }
+        }
 
     }
 
-    public void doClearInput(View view) {
+    private void toast(int code) {
+        String wroneMSG = Const.get(code);
+        Toast.makeText(this, wroneMSG, Toast.LENGTH_SHORT).show();
+    }
 
+    public void doClearInput(View view) {
+        preEditText.setText("");
+        midEditText.setText("");
+        postEditText.setText("");
     }
 
 
