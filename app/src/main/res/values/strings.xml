@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CalculateBinaryTree</string>
+    <string name="action_settings">Settings</string>
+    <string name="hint">输入中序和前序/后序,点击计算即可生成所有结果</string>
+</resources>
