@@ -48,18 +48,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initListener() {
-        preEditText.setOnClickListener(new View.OnClickListener() {
+        preEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-                postEditText.setText("");
-                isPreOrder = false;
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    postEditText.setText("");
+                    isPreOrder = false;
+                }
             }
         });
-        postEditText.setOnClickListener(new View.OnClickListener() {
+
+        postEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-                preEditText.setText("");
-                isPreOrder = true;
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    preEditText.setText("");
+                    isPreOrder = true;
+                }
             }
         });
 
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 orderModel.calculateOrderList(post, mid, isPreOrder);
                 System.out.println(orderModel.resultArrayList);
                 preEditText.setText(orderModel.resultArrayList.toString() + "");
+                Toast.makeText(this, "先序遍历结果计算完成~", Toast.LENGTH_SHORT).show();
             }
         } else {
             int checkedCode = orderModel.securityCheck(pre, mid);
@@ -87,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 orderModel.calculateOrderList(pre, mid, isPreOrder);
                 System.out.println(orderModel.resultArrayList);
                 postEditText.setText(orderModel.resultArrayList.toString() + "");
+                Toast.makeText(this, "后序遍历结果计算完成~", Toast.LENGTH_SHORT).show();
             }
         }
 
